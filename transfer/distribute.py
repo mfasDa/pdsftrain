@@ -20,7 +20,7 @@ class Worker():
 
         def AcceptJob(self, job):
                 shutil.copy(job, self.__inputdir)
-                self.__nfiles. += 1
+                self.__nfiles += 1
 
 def main():
         SCRIPTBASE=os.path.abspath(sys.argv[0])
