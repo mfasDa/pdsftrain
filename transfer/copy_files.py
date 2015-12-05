@@ -31,15 +31,15 @@ class TransferStream(Thread):
         # Copy all files of my thread
         for myfile in self.__filestotransfer:
             outputdir = os.path.dirname(myfile[1])
-            #print "Outputdir: %s" %(outputdir)
+            print "Outputdir: %s" %(outputdir)
             if not os.path.exists(outputdir):
                 os.makedirs(outputdir, 0755)
-            self.__alien_copy_file("alien://%s" %(myfile[0]), myfile[1])
+            self.__alien_copy_file("alien://%s" %myfile[0], myfile[1])
 
     def __alien_copy_file(self, source, target):
-        os.system("alien_cp %s %s &> /dev/null" %( source, target))
+        os.system("alien_cp %s %s &> /dev/null" %(source, target))
 
-def PrintInfo(rootfilename, path_in_alien):
+def PrintInfo():
     print " "
     print "------------------------------------------------------------------------"
     print "  remember to create an alien token first"
@@ -61,9 +61,7 @@ def Usage():
     print "  -n: Number of parallel streams  [default: 5]"
 
 def main():
-    username = alien_whoami()
-
-    if len(sys.argv > 1) and sys.argv[1] == "-h":
+    if len(sys.argv) < 2:
         Usage()
         sys.exit(1)
 
@@ -78,7 +76,7 @@ def main():
         sys.exit(2)
 
     for o,a in opts:
-        if o = "-n":
+        if o == "-n":
             nstream = int(a)
         elif o == "-h":
             Usage()
@@ -97,16 +95,20 @@ def main():
 
     # distriubte files to the workers
     currentworker = 0
-    for myfile in filelist:
+    reader = open(filelist, "r")
+    for myfile in reader:
         inputfile = myfile.split(" ")[0].lstrip().rstrip()
         outputfile = myfile.split(" ")[1].lstrip().rstrip()
-        print "Adding file %s to be copied to %s" %(inputfile, outputfile)
+        if os.path.exists(outputfile):
+                continue
+        #print "Adding file %s to be copied to %s" %(inputfile, outputfile)
         workers[currentworker].AddFile(inputfile, outputfile)
         # find next worker
         if currentworker == nstream-1:
             currentworker = 0
         else:
             currentworker += 1
+    reader.close()
 
     # start workers
     for myworker in workers:
@@ -117,7 +119,7 @@ def main():
         myworker.join()
 
     # we are done
-    print "%s %s" %(trainname, "copied from the grid and merged" if mergemode else "copied from the grid")
+    print "files copied from the grid"
 
 if __name__ == "__main__":
     main()

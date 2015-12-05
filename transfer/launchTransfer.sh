@@ -4,10 +4,10 @@ SCRIPTNAME=`readlink -f $0`
 BASE=`dirname $SCRIPTNAME`
 
 INPUTFILE=$1
-OUTPUTDIR=$1
+OUTPUTDIR=$2
 LOGFILE=$3
 
-soure /usr/share/Modules/init/bash
+source /usr/share/Modules/init/bash
 module use /project/projectdirs/alice/hpc/dtnmodulefiles
 module load dtn/alien/default
 
