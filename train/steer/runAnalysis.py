@@ -139,5 +139,5 @@ def runAnalysis(user, config, filelist, filemin, filemax):
 
 if __name__ == "__main__":
     ConfigHandler.SetTrainRoot(os.environ["TRAIN_ROOT"])
-    ConfigHandler.LoadConfiguration(config)
+    ConfigHandler.LoadConfiguration(sys.argv[2])
     runAnalysis(sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]), int(sys.argv[5]))

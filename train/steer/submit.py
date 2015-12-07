@@ -21,7 +21,7 @@ class Submitter():
         jobs = self.__nchunk
         if jobs < 0:
             jobs = int(self.GetNfiles()) / self.__splitlevel + 1
-        for j in range(0, jobs):
+        for j in range(1, jobs+1):
             os.makedirs(os.path.join(self.__outputdir, "job%d" %j))
         qsub = "qsub -l \"projectio=1,h_vmem=4G\" -t 1:%d" %jobs
         qsub += " " + self.__GetLogging()
