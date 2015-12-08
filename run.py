@@ -101,7 +101,7 @@ def main(argc, argv):
                 jobtrainroot = os.path.join(workdir, "TRAIN")
                 shutil.copytree(ConfigHandler.GetTrainRoot(), jobtrainroot)
                 tags = filelist.split("/")
-                outputdir = workdir
+                outputdir = os.path.join(workdir, "jobs")
                 for tag in tags:
                     if tag == config:
                         continue
@@ -135,7 +135,7 @@ def main(argc, argv):
         filelists = GetLists(config)
         for myfilelist in filelists:
             tags = myfilelist.split("/")
-            outputdir = workdir
+            outputdir = os.path.join(workdir, "jobs")
             for tag in tags:
                 if ".txt" in tag:
                     outputdir = os.path.join(outputdir, tag.replace(".txt",""))
