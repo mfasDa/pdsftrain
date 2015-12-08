@@ -120,7 +120,7 @@ def runAnalysis(user, config, filelist, filemin, filemax):
         print "Adding user %s" %user
         ProcessUser(user)
     else:
-        userreader = open(os.path.join(ConfigHandler.GetTrainRoot(), "config", "user"), "R")
+        userreader = open(os.path.join(ConfigHandler.GetTrainRoot(), "train",  "config", "users"), "r")
         for tmpuser in userreader:
             myuser = tmpuser.replace("\n", "").lstrip().rstrip()
             if(myuser[0] == "#"):
