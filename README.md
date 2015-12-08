@@ -75,14 +75,14 @@ options can be set:
 
  * -u / --user:  Run for a special user 
  * -c / --config: Configuration 
-* -l / --list: Run on a special file list
-* -s / --splitlevel: Number of files per job
-* -n / --nchunk: Number of chunks
-* -m / --minchunk: Minimum chunk (local running mode)
-* -i / --inputdir: Inputdir (for merging)
-* -f / --filename: Filename: (for merging)
-* -d / --debug: Debug mode (printing debug messages)
-* -h / --help: Print help
+ * -l / --list: Run on a special file list
+ * -s / --splitlevel: Number of files per job
+ * -n / --nchunk: Number of chunks
+ * -m / --minchunk: Minimum chunk (local running mode)
+ * -i / --inputdir: Inputdir (for merging)
+ * -f / --filename: Filename: (for merging)
+ * -d / --debug: Debug mode (printing debug messages)
+ * -h / --help: Print help
 
 Note that the parameter -c is mandatory as the train configuration is loaded 
 according to this parameter.
@@ -102,13 +102,13 @@ given configuration, for all users which are enabled.
 
 Once the train is done, you find the output under
 
-* in batch mode
+* in batch mode: 
 
-    /project/projectdirs/alice/<username>/train/V<Version>.<configuration>/<tag>
+    /project/projectdirs/alice/[username]/train/V[Version].[configuration]/[tag]
     
 * in train mode
 
-    /project/projectdirs/alice/train/V<Version>.<configuration>/<tag>
+    /project/projectdirs/alice/train/V[Version].[configuration]/[tag]
     
 The tag always consists of the date and the time in seconds. Merging is currently 
 done up to run level.
