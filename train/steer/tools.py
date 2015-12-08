@@ -48,7 +48,19 @@ def SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, chunks, user):
         submitter.SetNchunk(chunks)
     submitter.SetUser(user)
     submitter.Submit()
+    return submitter.GetJobID()
+    
+def SubmitMergeJob(jobtrainroot, inputdir, jobid):
+    jobbase = jobtrainroot
+    jobbase.replace("TRAIN", "")
+    jobbase.rstrip("/")
+    tmpdir = inputdir.replace(jobbase)
+    tmpdir.lstrip("/")
+    outputdir = "%s/merge/%s" %(jobbase, tmpdir)
+    if not os.path.exists(outputdir):
+        os.makedirs(outputdir, 0755)
+    cmd = "qsub -l \"projectio=1,h_vmem=4G\" -hold_jid %d -j y -o %s/merge.log %s/train/steer/mergescript.sh %s %s %s %s" %(jobid, outputdir, jobtrainroot, jobtrainroot, inputdir, outputdir, "AnalysisResults.root") 
+    os.system(cmd)
         
-
 def GetWorkdir(doGlobal):
     return os.path.join(ConfigHandler.GetConfig().GetTrainOutputPath(doGlobal), GetTag())

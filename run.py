@@ -11,7 +11,7 @@ import shutil
 if __name__ == "__main__":
     sys.path.append(os.path.dirname(sys.argv[0]))
 
-from train.steer.tools import GetWorkdir, SubmitBatch, FindList, GetLists
+from train.steer.tools import GetWorkdir, SubmitBatch, FindList, GetLists, SubmitMergeJob
 from train.steer.config import ConfigHandler
 from train.steer.runAnalysis import runAnalysis
 from train.steer.merge import merge
@@ -122,7 +122,9 @@ def main(argc, argv):
                     print "Split level:                 %s" %splitlevel
                     print "Using custom train root location %s" %jobtrainroot
                 else:
-                    SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, nchunk, userdir)
+                    jobid=SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, nchunk, userdir)
+                    print "Runlist %s submitted under job ID %s" %(filelist, jobid)
+                    SubmitMergeJob(jobtrainroot, outputdir, jobid)
             else:
                 print "List %s not found in your TRAIN_ROOT installation" %filelist
         else:
@@ -143,7 +145,9 @@ def main(argc, argv):
                     break
                 outputdir = os.path.join(outputdir, tag)
             os.makedirs(outputdir, 0755)
-            SubmitBatch(outputdir, jobtrainroot, myfilelist, splitlevel, nchunk, userdir)
+            jobid = SubmitBatch(outputdir, jobtrainroot, myfilelist, splitlevel, nchunk, userdir)
+            print "Runlist %s submitted under job ID %s" %(myfilelist, jobid)
+            SubmitMergeJob(jobtrainroot, outputdir, jobid)
     elif mode == "merge":
         if nchunk < 0:
             nchunk = ConfigHandler.GetConfig().GetMergeSize()
