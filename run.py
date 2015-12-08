@@ -14,6 +14,7 @@ if __name__ == "__main__":
 from train.steer.tools import GetWorkdir, SubmitBatch, FindList, GetLists
 from train.steer.config import ConfigHandler
 from train.steer.runAnalysis import runAnalysis
+from train.steer.merge import merge
 
 def Usage():
     print "Usage: ./run.py [MODE] [OPITONS]"
@@ -144,7 +145,9 @@ def main(argc, argv):
             os.makedirs(outputdir, 0755)
             SubmitBatch(outputdir, jobtrainroot, myfilelist, splitlevel, nchunk, userdir)
     elif mode == "merge":
-        pass
+        if nchunk < 0:
+            nchunk = ConfigHandler.GetConfig().GetMergeSize()
+        merge(inputdir, filename, nchunk)
     elif mode == "local":
         runAnalysis(userdir, config, filelist, filemin, filemin+nchunk)    
                 
