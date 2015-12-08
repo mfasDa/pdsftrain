@@ -9,6 +9,9 @@ void AddEmcalPreparationTasks()
   //setupTask->SetOcdbPath("local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2015/OCDB");
   setupTask->SetOcdbPath("raw://");
 
+  gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+  AliMultSelectionTask* task = AddTaskMultSelection(kFALSE); // user mode:
+
   Bool_t  bDistBC          = kFALSE; //switch for recalculation cluster position from bad channel
   Bool_t  bRecalibClus     = kFALSE;
   Bool_t  bRecalcClusPos   = kFALSE;
