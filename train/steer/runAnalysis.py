@@ -18,6 +18,7 @@ class UserConfig(object):
     def __init__(self):
         self.__name = ""
         self.__macro = ""
+        self.__arguments = ""
         self.__status = ""
         
     def Initialize(self, node):
@@ -26,6 +27,8 @@ class UserConfig(object):
                 self.__name = v
             elif k == "MACRO":
                 self.__macro = v 
+            elif k == "ARGUMENTS":
+                self.__arguments = v
             elif k == "STATUS":
                 self.__status = v
     
@@ -34,6 +37,9 @@ class UserConfig(object):
     
     def SetMacro(self, macro):
         self.__macro = macro
+        
+    def SetArguments(self, arguments):
+        self.__arguments = arguments
     
     def SetStatus(self, status):
         self.__status = status
@@ -43,6 +49,9 @@ class UserConfig(object):
     
     def GetMacro(self):
         return self.__macro
+    
+    def GetArguments(self):
+        return self.__arguments
     
     def GetStatus(self):
         return self.__status
@@ -66,12 +75,17 @@ def ProcessUser(username):
                 taskconfig = UserConfig()
                 taskconfig.Initialize(task)
                 if taskconfig.GetStatus().upper() == "ACTIVE":
+                    macroname = ""
                     if "$ALICE_ROOT" in taskconfig.GetMacro() or "$ALICE_PHYSICS" in taskconfig.GetMacro():
                         # Load macro from AliRoot or AliPhysics
-                        ROOT.gROOT.Macro(taskconfig.GetMacro())
+                        macroname = taskconfig.GetMacro()
                     else:
                         # Load macro from user directory
-                        ROOT.gROOT.Macro("%s/%s/%s" %(ConfigHandler.GetTrainRoot(), username, taskconfig.GetMacro()))
+                        macroname = "%s/%s/%s" %(ConfigHandler.GetTrainRoot(), username, taskconfig.GetMacro())
+                    macrostring = macroname
+                    if len(taskconfig.GetArguments()):
+                        macrostring = "%s(%s)" %(macroname, taskconfig.GetArguments())
+                    ROOT.gROOT.Macro(macrostring)
 
 def CreateChain(filelist, treename):
     chain = ROOT.TChain(treename, "")
