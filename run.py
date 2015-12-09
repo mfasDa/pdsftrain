@@ -94,7 +94,7 @@ def main(argc, argv):
 
     if mode == "batch":
         # prepare job submission
-        workdir = GetWorkdir(True if mode == "train" else False)
+        workdir = GetWorkdir(False)
         if len(filelist): # run over one file
             if FindList(filelist):
                 # create outputdir and copy train_root to that localtion
@@ -130,14 +130,17 @@ def main(argc, argv):
         else:
             "Batch mode - please specify an input list"
     elif mode == "train":
+        workdir = GetWorkdir(True)
         os.makedirs(workdir, 0755)
         jobtrainroot = os.path.join(workdir, "TRAIN")
-        shutil.copy(ConfigHandler.GetTrainRoot(), jobtrainroot)
+        shutil.copytree(ConfigHandler.GetTrainRoot(), jobtrainroot)
             
         # run over all files
         filelists = GetLists(config)
         for myfilelist in filelists:
-            tags = myfilelist.split("/")
+            tmplist = myfilelist
+            tmplist = tmplist.replace("/train/filelists/", "")
+            tags = tmplist.split("/")
             outputdir = os.path.join(workdir, "jobs")
             for tag in tags:
                 if ".txt" in tag:
@@ -145,8 +148,8 @@ def main(argc, argv):
                     break
                 outputdir = os.path.join(outputdir, tag)
             os.makedirs(outputdir, 0755)
-            jobid = SubmitBatch(outputdir, jobtrainroot, myfilelist, splitlevel, nchunk, userdir)
-            print "Runlist %s submitted under job ID %s" %(myfilelist, jobid)
+            jobid = SubmitBatch(outputdir, jobtrainroot, tmplist, splitlevel, nchunk, userdir)
+            print "Runlist %s submitted under job ID %s" %(tmplist, jobid)
             SubmitMergeJob(jobtrainroot, outputdir, jobid)
     elif mode == "merge":
         if nchunk < 0:

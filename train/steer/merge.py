@@ -43,8 +43,6 @@ def find_mergefiles(inputdir, rootfilename):
 def merge(inputdir, rootfilename, chunksperiter):
     # Assume we are in the output directory := working direcktory
     splitlevel=10
-    filename=None
-
     workdirbase = os.getcwd()
 
     iteration = 0
@@ -61,13 +59,13 @@ def merge(inputdir, rootfilename, chunksperiter):
             workdir_source = workdir_target
         workdir_target = os.path.join(workdirbase, "%s_iteration_%d" %(basename, iteration))
         os.makedirs(workdir_target, 0744)
-        filelist = merge_iteration(filelist, splitlevel, filename, workdir_target)
+        filelist = merge_iteration(filelist, splitlevel, rootfilename, workdir_target)
         # prepare next recursion step
         iteration += 1
         isDone = True if len(filelist) <= 1 else False
 
     # Move output to its destination
-    shutil.copy(os.path.join(workdir_target, filelist[0]), os.path.join(workdirbase, filename))
+    shutil.copy(os.path.join(workdir_target, filelist[0]), os.path.join(workdirbase, rootfilename))
     # find leftover iterations
     dircontent = os.listdir(workdirbase)
     for mydir in dircontent:

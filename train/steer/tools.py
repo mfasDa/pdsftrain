@@ -32,7 +32,8 @@ def FindFiles(inputdir):
 def GetLists(mode):
     filelists = []
     trainroot = ConfigHandler.GetTrainRoot()
-    currentdir = os.path.join(trainroot, mode)
+    currentdir = os.path.join(trainroot, "train", "filelists", mode)
+    print currentdir
     found = FindFiles(currentdir)
     # strip away train root
     for f in found:
@@ -52,14 +53,15 @@ def SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, chunks, user):
     
 def SubmitMergeJob(jobtrainroot, inputdir, jobid):
     jobbase = jobtrainroot
-    jobbase.replace("TRAIN", "")
+    jobbase = jobbase.replace("TRAIN", "")
     jobbase.rstrip("/")
-    tmpdir = inputdir.replace(jobbase)
+    tmpdir = inputdir.replace(os.path.join(jobbase, "jobs"), "")
     tmpdir.lstrip("/")
     outputdir = "%s/merge/%s" %(jobbase, tmpdir)
     if not os.path.exists(outputdir):
         os.makedirs(outputdir, 0755)
-    cmd = "qsub -l \"projectio=1,h_vmem=4G\" -hold_jid %d -j y -o %s/merge.log %s/train/steer/mergescript.sh %s %s %s %s" %(jobid, outputdir, jobtrainroot, jobtrainroot, inputdir, outputdir, "AnalysisResults.root") 
+    cmd = "qsub -l \"projectio=1,h_vmem=4G\" -hold_jid %d -j y -o %s/merge.log %s/train/steer/mergescript.sh %s %s %s %s %s" %(jobid, outputdir, jobtrainroot, jobtrainroot, ConfigHandler.GetConfig().GetName(), inputdir, outputdir, "AnalysisResults.root") 
+    print "Submitting %s" %cmd
     os.system(cmd)
         
 def GetWorkdir(doGlobal):

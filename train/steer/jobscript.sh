@@ -7,6 +7,8 @@ USER=$4
 FILELIST=$5
 NFILES=$6
 
+export NERSC_HOST=pdsf
+
 counter=$(echo "$SGE_TASK_ID - 1" | bc)
 MIN=$(echo "$counter * $NFILES" | bc)
 MAX=$(echo "($counter+1) * $NFILES" | bc)

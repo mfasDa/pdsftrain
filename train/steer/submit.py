@@ -27,11 +27,11 @@ class Submitter():
             jobs = int(self.GetNfiles()) / self.__splitlevel + 1
         for j in range(1, jobs+1):
             os.makedirs(os.path.join(self.__outputdir, "job%d" %j))
-        qsub = "qsub -l \"projectio=1,h_vmem=4G\" -t 1:%d" %jobs
+        qsub = "qsub -l \"projectio=1,h_vmem=6G\" -t 1:%d" %jobs
         qsub += " " + self.__GetLogging()
         qsub += " " + self.__GetExecutable()
         #print "Here I would do %s" %qsub
-        self.__jobid = self.__DecodeAnswer(commands.getoutput(qsub)[1])
+        self.__jobid = self.__DecodeAnswer(commands.getstatusoutput(qsub)[1])
         
     def __GetExecutable(self):
         return "%s %s %s %s %s %s %s" %(os.path.join(self.__jobtrainroot, "train", "steer", "jobscript.sh"), self.__jobtrainroot, ConfigHandler.GetConfig().GetName(), self.__outputdir, self.__user, self.__inputlist, self.__splitlevel)
@@ -46,6 +46,8 @@ class Submitter():
        
     def GetNfiles(self): 
         nfiles = 0
+        # path = "%s/train/filelists/%s" %(self.__jobtrainroot, self.__inputlist)
+        # reader = open(path, 'r')
         reader = open(os.path.join(self.__jobtrainroot, "train", "filelists", self.__inputlist), 'r')
         for line in reader:
             newline = line.replace("\n", "").lstrip().rstrip()
