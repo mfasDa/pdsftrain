@@ -6,10 +6,13 @@ void AddEmcalPreparationTasks()
   printf("ALICE_PHYSICS: %s\n", gSystem->Getenv("ALICE_PHYSICS"));
   gROOT->LoadMacro(Form("%s/PWG/EMCAL/macros/AddTaskEmcalSetup.C", gSystem->Getenv("ALICE_PHYSICS")));
   AliEmcalSetupTask *setupTask = AddTaskEmcalSetup();
-  if(TString(gSystem->Getenv("NERSC_HOST")).Contains("pdsf"))
+  if(TString(gSystem->Getenv("NERSC_HOST")).Contains("pdsf")){
+          printf("Using OCDB from cvmfs");
           setupTask->SetOcdbPath("local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2015/OCDB");
-  else
+  } else { 
+          printf("Using raw OCDB\n");
           setupTask->SetOcdbPath("raw://");
+  }
 
   gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
   AliMultSelectionTask* task = AddTaskMultSelection(kFALSE); // user mode:
