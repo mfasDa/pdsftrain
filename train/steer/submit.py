@@ -1,5 +1,6 @@
 import os, commands
 from train.steer.config import ConfigHandler
+from train.steer.tools import DecodeSGEResponse
     
 class Submitter():
     
@@ -31,7 +32,7 @@ class Submitter():
         qsub += " " + self.__GetLogging()
         qsub += " " + self.__GetExecutable()
         #print "Here I would do %s" %qsub
-        self.__jobid = self.__DecodeAnswer(commands.getstatusoutput(qsub)[1])
+        self.__jobid = DecodeSGEResponse(commands.getstatusoutput(qsub)[1])
         
     def __GetExecutable(self):
         return "%s %s %s %s %s %s %s" %(os.path.join(self.__jobtrainroot, "train", "steer", "jobscript.sh"), self.__jobtrainroot, ConfigHandler.GetConfig().GetName(), self.__outputdir, self.__user, self.__inputlist, self.__splitlevel)
@@ -39,11 +40,6 @@ class Submitter():
     def __GetLogging(self):
         return "-j y -o %s/job\$TASK_ID/joboutput.log" %self.__outputdir
     
-    def __DecodeAnswer(self, answer):
-        tokens = answer.split(" ")
-        runstring = tokens[2]
-        return int(runstring.split(".")[0])
-       
     def GetNfiles(self): 
         nfiles = 0
         # path = "%s/train/filelists/%s" %(self.__jobtrainroot, self.__inputlist)

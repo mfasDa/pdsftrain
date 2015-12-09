@@ -7,6 +7,7 @@ Created on 01.12.2015
 import os, time
 from train.steer.config import ConfigHandler
 from train.steer.submit import Submitter
+from train.steer.sample import Sample
 
 def GetTag():
     config = ConfigHandler.GetConfig()
@@ -29,19 +30,15 @@ def FindFiles(inputdir):
             result.append(os.path.join(os.path.abspath(mypath), f))
     return result
 
-def GetLists(mode):
-    filelists = []
-    trainroot = ConfigHandler.GetTrainRoot()
-    currentdir = os.path.join(trainroot, "train", "filelists", mode)
-    print currentdir
-    found = FindFiles(currentdir)
-    # strip away train root
-    for f in found:
-        test = f.replace(trainroot, "")
-        test = test.rstrip().lstrip()
-        if test[0] == "/":
-            filelists.append(test)
-    return filelists
+
+def GetSamplesForConfig(configname):
+    result = []
+    inputdir = os.path.join(ConfigHandler.GetTrainRoot(), "train", "config", "samples")
+    for mypath, midirs, myfiles in os.walk(inputdir):
+        for l in myfiles:
+            if str(l).startswith(configname):
+                result.append(Sample(os.path.join(mypath, l)))
+    return result
     
 def SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, chunks, user):
     submitter = Submitter(filelist, jobtrainroot, outputdir, splitlevel)
@@ -51,18 +48,11 @@ def SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, chunks, user):
     submitter.Submit()
     return submitter.GetJobID()
     
-def SubmitMergeJob(jobtrainroot, inputdir, jobid):
-    jobbase = jobtrainroot
-    jobbase = jobbase.replace("TRAIN", "")
-    jobbase.rstrip("/")
-    tmpdir = inputdir.replace(os.path.join(jobbase, "jobs"), "")
-    tmpdir.lstrip("/")
-    outputdir = "%s/merge/%s" %(jobbase, tmpdir)
-    if not os.path.exists(outputdir):
-        os.makedirs(outputdir, 0755)
-    cmd = "qsub -l \"projectio=1,h_vmem=4G\" -hold_jid %d -j y -o %s/merge.log %s/train/steer/mergescript.sh %s %s %s %s %s" %(jobid, outputdir, jobtrainroot, jobtrainroot, ConfigHandler.GetConfig().GetName(), inputdir, outputdir, "AnalysisResults.root") 
-    print "Submitting %s" %cmd
-    os.system(cmd)
+    
+def DecodeSGEResponse(sgeresponse):
+    tokens = sgeresponse.split(" ")
+    runstring = tokens[2]
+    return int(runstring.split(".")[0])
         
 def GetWorkdir(doGlobal):
     return os.path.join(ConfigHandler.GetConfig().GetTrainOutputPath(doGlobal), GetTag())

@@ -11,10 +11,11 @@ import shutil
 if __name__ == "__main__":
     sys.path.append(os.path.dirname(sys.argv[0]))
 
-from train.steer.tools import GetWorkdir, SubmitBatch, FindList, GetLists, SubmitMergeJob
+from train.steer.tools import GetWorkdir, SubmitBatch, FindList, GetSamplesForConfig
 from train.steer.config import ConfigHandler
 from train.steer.runAnalysis import runAnalysis
 from train.steer.merge import merge
+from train.steer.mergejob import Mergejob
 
 def Usage():
     print "Usage: ./run.py [MODE] [OPITONS]"
@@ -103,14 +104,16 @@ def main(argc, argv):
                 shutil.copytree(ConfigHandler.GetTrainRoot(), jobtrainroot)
                 tags = filelist.split("/")
                 outputdir = os.path.join(workdir, "jobs")
+                mergedir = os.path.join(workdir, "merge_runs")
                 for tag in tags:
                     if tag == config:
                         continue
                     if ".txt" in tag:
                         outputdir = os.path.join(outputdir, tag.replace(".txt",""))
+                        mergedir = os.path.join(mergedir, tag.replace(".txt", ""))
                         break
                     outputdir = os.path.join(outputdir, tag)
-                os.makedirs(outputdir, 0755)
+                    mergedir = os.path.join(mergedir, tag)
                 # for debugging
                 if debug:
                     print "Submitting batch job:"
@@ -122,9 +125,18 @@ def main(argc, argv):
                     print "Split level:                 %s" %splitlevel
                     print "Using custom train root location %s" %jobtrainroot
                 else:
+                    os.makedirs(outputdir, 0755)
                     jobid=SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, nchunk, userdir)
                     print "Runlist %s submitted under job ID %s" %(filelist, jobid)
-                    SubmitMergeJob(jobtrainroot, outputdir, jobid)
+                    
+                    os.makedirs(mergedir, 0755)
+                    mergejob = Mergejob()
+                    mergejob.SetInputDir(outputdir)
+                    mergejob.SetOutputDir(mergedir)
+                    mergejob.SetTrainRoot(jobtrainroot)
+                    mergejob.SetFileToMerge("AnalysisResults.root")
+                    mergejob.AddHoldJID(jobid)
+                    
             else:
                 print "List %s not found in your TRAIN_ROOT installation" %filelist
         else:
@@ -134,23 +146,45 @@ def main(argc, argv):
         os.makedirs(workdir, 0755)
         jobtrainroot = os.path.join(workdir, "TRAIN")
         shutil.copytree(ConfigHandler.GetTrainRoot(), jobtrainroot)
+
+        # Use sample definition in order to
+        for sample in GetSamplesForConfig(config):
+            jobdirbase = os.path.join(workdir, "jobs", sample.GetName())
+            mergedirbase = os.path.join(workdir, "merge_runs", sample.GetName())
+            mergedirfinal = os.path.join(workdir, "merge_sample", sample.GetName())
+
+            finalmerge = Mergejob()
+            finalmerge.SetInputDir(mergedirbase)
+            finalmerge.SetOutputDir(mergedirfinal)
+            finalmerge.SetTrainRoot(jobtrainroot)
+            finalmerge.SetFileToMerge("AnalysisResults.root")
             
-        # run over all files
-        filelists = GetLists(config)
-        for myfilelist in filelists:
-            tmplist = myfilelist
-            tmplist = tmplist.replace("/train/filelists/", "")
-            tags = tmplist.split("/")
-            outputdir = os.path.join(workdir, "jobs")
-            for tag in tags:
-                if ".txt" in tag:
-                    outputdir = os.path.join(outputdir, tag.replace(".txt",""))
-                    break
-                outputdir = os.path.join(outputdir, tag)
-            os.makedirs(outputdir, 0755)
-            jobid = SubmitBatch(outputdir, jobtrainroot, tmplist, splitlevel, nchunk, userdir)
-            print "Runlist %s submitted under job ID %s" %(tmplist, jobid)
-            SubmitMergeJob(jobtrainroot, outputdir, jobid)
+            
+            for l in sample.GetFilelists():
+                runstring = os.path.basename(l).replace(".txt", "").lstrip().rstrip()
+                jobdir = os.path.join(jobdirbase, runstring)
+                os.makedirs(jobdir, 0755)
+                mergedir = os.path.join(mergedirbase, runstring)
+                os.makedirs(mergedir, 0755)
+                
+                if splitlevel < 0:
+                    splitlevel = sample.GetSplitLevel()
+                    
+                jobid = SubmitBatch(jobdir, jobtrainroot, l, splitlevel, nchunk, userdir)
+                print "Runlist %s submitted under job ID %s" %(l, jobid)
+                
+                mergejob = Mergejob()
+                mergejob.SetInputDir(jobdir)
+                mergejob.SetOutputDir(mergedir)
+                mergejob.SetTrainRoot(jobtrainroot)
+                mergejob.AddHoldJID(jobid)
+                mergejob.SetFileToMerge("AnalysisResults.root")
+                mergejob.Submit()
+                
+                finalmerge.AddHoldJID(mergejob.GetJobID())
+            
+            finalmerge.Submit()                
+            
     elif mode == "merge":
         if nchunk < 0:
             nchunk = ConfigHandler.GetConfig().GetMergeSize()
