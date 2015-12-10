@@ -67,6 +67,19 @@ def ReadJSON(filename):
 
 def ProcessUser(username):
     userdir = os.path.join(ConfigHandler.GetTrainRoot(), username)
+    
+    # Check if user has  a build script, if yes, execute it
+    if os.path.exists(os.path.join(userdir, "build.sh")):
+        currentdir = os.getcwd()
+        os.chdir(userdir)
+        os.system("./build.sh")
+        os.chdir(currentdir)
+    
+    # If user has a user-defined script Loading libraries, process it    
+    if os.path.exists(os.path.join(userdir, "Load.C")):
+        ROOT.gROOT.Macro(os.path.join(userdir, "Load.C"))
+    
+    # Add tasks processed in the config file
     userconfig = os.path.join(userdir, "config.json")
     configs = json.loads(ReadJSON(userconfig))
     for myconf, tasks in configs.iteritems():
