@@ -13,7 +13,7 @@ class Mergejob(object):
     classdocs
     '''
 
-    def __init__(self, params):
+    def __init__(self):
         '''
         Constructor
         '''

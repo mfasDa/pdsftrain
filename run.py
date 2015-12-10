@@ -144,6 +144,7 @@ def main(argc, argv):
                     mergejob.SetTrainRoot(jobtrainroot)
                     mergejob.SetFileToMerge("AnalysisResults.root")
                     mergejob.AddHoldJID(jobid)
+                    mergejob.Submit()
                     
             else:
                 print "List %s not found in your TRAIN_ROOT installation" %filelist

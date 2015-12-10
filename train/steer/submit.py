@@ -32,7 +32,9 @@ class Submitter():
         qsub += " " + self.__GetLogging()
         qsub += " " + self.__GetExecutable()
         #print "Here I would do %s" %qsub
-        self.__jobid = DecodeSGEResponse(commands.getstatusoutput(qsub)[1])
+        response  = commands.getstatusoutput(qsub)[1]
+        print response
+        self.__jobid = DecodeSGEResponse(response)
         
     def __GetExecutable(self):
         return "%s %s %s %s %s %s %s" %(os.path.join(self.__jobtrainroot, "train", "steer", "jobscript.sh"), self.__jobtrainroot, ConfigHandler.GetConfig().GetName(), self.__outputdir, self.__user, self.__inputlist, self.__splitlevel)
