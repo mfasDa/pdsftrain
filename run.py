@@ -11,7 +11,8 @@ import shutil
 if __name__ == "__main__":
     sys.path.append(os.path.dirname(sys.argv[0]))
 
-from train.steer.tools import GetWorkdir, SubmitBatch, FindList, GetSamplesForConfig
+from train.steer.tools import GetWorkdir, FindList, GetSamplesForConfig
+from train.steer.submit import Submitter
 from train.steer.config import ConfigHandler
 from train.steer.runAnalysis import runAnalysis
 from train.steer.merge import merge
@@ -37,6 +38,13 @@ def Usage():
     print "    -d|--debug: Debug mode (printing debug messages)" 
     print "    -h|--help: Print help"
     
+def SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, chunks, user):
+    submitter = Submitter(filelist, jobtrainroot, outputdir, splitlevel)
+    if chunks >= 0:
+        submitter.SetNchunk(chunks)
+    submitter.SetUser(user)
+    submitter.Submit()
+    return submitter.GetJobID()
 
 def main(argc, argv):
     

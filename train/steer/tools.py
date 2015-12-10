@@ -6,7 +6,6 @@ Created on 01.12.2015
 
 import os, time
 from train.steer.config import ConfigHandler
-from train.steer.submit import Submitter
 from train.steer.sample import Sample
 
 def GetTag():
@@ -39,15 +38,6 @@ def GetSamplesForConfig(configname):
             if str(l).startswith(configname):
                 result.append(Sample(os.path.join(mypath, l)))
     return result
-    
-def SubmitBatch(outputdir, jobtrainroot, filelist, splitlevel, chunks, user):
-    submitter = Submitter(filelist, jobtrainroot, outputdir, splitlevel)
-    if chunks >= 0:
-        submitter.SetNchunk(chunks)
-    submitter.SetUser(user)
-    submitter.Submit()
-    return submitter.GetJobID()
-    
     
 def DecodeSGEResponse(sgeresponse):
     tokens = sgeresponse.split(" ")
