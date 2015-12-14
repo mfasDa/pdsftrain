@@ -181,7 +181,7 @@ def runAnalysis(user, config, filelist, filemin, filemax):
         # create syswatch.root file
         syswatchwriter = ROOT.TFile("syswatch.root", "RECREATE")
         syswatchwriter.cd()
-        ROOT.AliSysInfo.MakeTree(os.path.join(os.getcwd(), "syswatch.log")).Write()
+        ROOT.AliSysInfo.MakeTree(os.path.join(os.getcwd(), "syswatch.log")).Write("syswatch")
         syswatchwriter.Close()
 
 if __name__ == "__main__":
