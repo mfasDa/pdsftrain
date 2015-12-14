@@ -5,4 +5,4 @@
 *.swp
 .project
 .pydevproject
-build
+build/
