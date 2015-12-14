@@ -113,7 +113,7 @@ void AddTaskEmcalQA()
 
       if (gCaloTriggerLabels[i] == "INT7" || gCaloTriggerLabels[i].BeginsWith("EMCE")) {
 	suffix = gCaloTriggerLabels[i];
-	AliAnalysisTaskSAJF *pJFTask = AddTaskSAJF("", "CaloClusters", aktJetTask->GetName(), "NeutralRhoDCal", 0.2, 1, 0., "EMCALfid", 0, suffix);
+	AliAnalysisTaskSAJF *pJFTask = AddTaskSAJF("", "CaloClusters", aktJetTask->GetName(), "NeutralRhoDCal", 0.2, 1, 0., "EMCALfid", 1, suffix);
 	pJFTask->SetEMCalTriggerMode(AliAnalysisTaskEmcal::kNoSpecialTreatment);
 	pJFTask->SetTrigClass(gCaloTriggerNames[i]);
 	pJFTask->SetVzRange(-999,999);
@@ -123,9 +123,8 @@ void AddTaskEmcalQA()
       }
 
       if (gCaloTriggerLabels[i] == "INT7" || gCaloTriggerLabels[i].BeginsWith("DMCE")) {
-	suffix = "_";
-	suffix += gCaloTriggerLabels[i];
-	AliAnalysisTaskSAJF *pJFTask = AddTaskSAJF("", "CaloClusters", aktJetTask->GetName(), "NeutralRhoEMCal", 0.2, 1, 0., "DCALfid", 0, suffix);
+	suffix = gCaloTriggerLabels[i];
+	AliAnalysisTaskSAJF *pJFTask = AddTaskSAJF("", "CaloClusters", aktJetTask->GetName(), "NeutralRhoEMCal", 0.2, 1, 0., "DCALfid", 1, suffix);
 	pJFTask->SetEMCalTriggerMode(AliAnalysisTaskEmcal::kNoSpecialTreatment);
 	pJFTask->SetTrigClass(gCaloTriggerNames[i]);
 	pJFTask->SetVzRange(-999,999);
