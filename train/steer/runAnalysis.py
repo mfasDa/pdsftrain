@@ -127,14 +127,14 @@ def CreateHandlers():
         ROOT.gROOT.Macro(handler)
         
 def HandleAlien(filelist):
+    print "Checking for alien file"
     hasAlien = False
     for f in filelist:
         if "alien://" in f:
             hasAlien = True
             break
     if hasAlien:
-        if hasAlien:
-            print "At least one file in the list requires connection to alien ..."
+        print "At least one file in the list requires connection to alien ..."
         ROOT.TGrid.Connect("alien://")
 
 def ReadFileList(inputfile, mymin, mymax):
@@ -181,7 +181,7 @@ def runAnalysis(user, config, filelist, filemin, filemax):
         userreader.close()
         
     files = ReadFileList(os.path.join(ConfigHandler.GetTrainRoot(), "train", "filelists", filelist), filemin, filemax)
-    HandleAlien(filelist)
+    HandleAlien(files)
     if not len(files):
         print "No files found to analyze"
         return
