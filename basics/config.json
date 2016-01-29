@@ -23,6 +23,22 @@
     ],
     "pPb":
     [
+          {
+            "NAME": "PhysicsSelection",
+            "MACRO": "$ALICE_PHYSICS/OADB/macros/AddTaskPhysicsSelection.C",
+            "STATUS": "Active"
+        },
+        {
+            "NAME":  "Multiplicity",
+            "MACRO": "$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C",
+            "ARGUMENTS" : "kFALSE",
+            "STATUS": "Active"
+        },
+        {
+            "NAME": "EmcalPreparation",
+            "MACRO": "AddEmcalPreparationTasks.C",
+            "STATUS": "Active"
+        }
     ],
     "MC_PbPb":
     [
