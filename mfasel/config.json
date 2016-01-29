@@ -12,6 +12,16 @@
     ],
     "pPb":
     [
+        {
+            "NAME":"ClusterRef",
+            "MACRO":"AddTaskClustersRef.C",
+            "STATUS":"Inactive"
+        },
+        {
+            "NAME":"eventFilter",
+            "MACRO":"$ALICE_PHYSICS/PWGJE/EMCALJetTasks/macros/AddTaskEventFilter.C",
+            "STATUS":"Active"
+        }
     ],
     "MC_PbPb":
     [
