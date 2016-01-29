@@ -6,3 +6,4 @@
 .project
 .pydevproject
 build/
+/syswatch.log
