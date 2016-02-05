@@ -14,7 +14,8 @@ void AddEmcalPreparationTasks()
 #endif
   if(TString(gSystem->Getenv("NERSC_HOST")).Contains("pdsf")){
     printf("Using OCDB from cvmfs");
-    setupTask->SetOcdbPath("local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2015/OCDB");
+    //setupTask->SetOcdbPath("local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2015/OCDB");
+    setupTask->SetOcdbPath("local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2013/OCDB");
   } else { 
     printf("Using raw OCDB\n");
     setupTask->SetOcdbPath("raw://");
