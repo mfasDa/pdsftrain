@@ -44,6 +44,11 @@
         {
             "NAME":"ChargedParticlesRef",
             "MACRO":"$ALICE_PHYSICS/PWGJE/EMCALJetTasks/macros/AddTaskChargedParticlesRefMC.C",
+            "STATUS":"Inactive"
+        },
+        {
+            "NAME":"EfficiencyEtaPhi",
+            "MACRO":"$ALICE_PHYSICS/PWGJE/EMCALJetTasks/macros/AddTaskEfficiencyEtaPhi.C",
             "STATUS":"Active"
         }
     ]

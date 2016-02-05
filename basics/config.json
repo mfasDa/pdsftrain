@@ -51,7 +51,7 @@
         {
             "NAME": "PhysicsSelection",
             "MACRO": "$ALICE_PHYSICS/OADB/macros/AddTaskPhysicsSelection.C",
-            "STATUS": "Inactive"
+            "STATUS": "Active"
         },
         {
             "NAME":  "Multiplicity",
