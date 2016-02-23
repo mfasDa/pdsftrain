@@ -4,6 +4,7 @@
 class AliESDtrackCuts;
 class TTreeSRedirector;
 class TList;
+class TH1;
 
 #include <AliAnalysisTaskSE.h>
 
@@ -38,13 +39,15 @@ public:
 	TwoParticleAnalysis(const char *name);
 	virtual ~TwoParticleAnalysis();
 
-	void UserCreateOutputObject();
+	void UserCreateOutputObjects();
 	void UserExec(Option_t *opt);
 
 private:
 	AliESDtrackCuts 			*fTrackCuts;
-	TList 						*fHistos;
-	TTreeSRediector				*fTreeStream;
+	TList 								*fHistos;
+	TH1										*fEventCount;
+	TTreeSRedirector			*fTreeStream;
 
 	ClassDef(TwoParticleAnalysis, 1);
 };
+#endif

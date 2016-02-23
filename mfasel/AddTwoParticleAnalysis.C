@@ -4,9 +4,10 @@ TwoParticleAnalysis *AddTwoParticleAnalysis(){
 	TwoParticleAnalysis *twoparticle = new TwoParticleAnalysis("twoparticleanalysis");
 	mgr->AddTask(twoparticle);
 
-	TString filename = mgr->GetCommonFileName() + ":twoparticlehists";
+	TString filename = mgr->GetCommonFileName();
+	filename += ":twoparticlehists";
 
-	twoparticle->ConnectInput(1, mgr->GetCommonInputContainer());
-	twoparticle->ConnectOutput(1, task->CreateContainer("histocontainer", TList::Class(), AliAnalysisManager::kOutputContainer, filename.Data()));
+	mgr->ConnectInput(twoparticle, 0, mgr->GetCommonInputContainer());
+	mgr->ConnectOutput(twoparticle, 1, mgr->CreateContainer("histocontainer", TList::Class(), AliAnalysisManager::kOutputContainer, filename.Data()));
 	return twoparticle;
 }
