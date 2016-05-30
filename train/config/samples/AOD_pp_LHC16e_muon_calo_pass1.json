@@ -1,0 +1,8 @@
+{
+    "NAME":"LHC16d_muon_calo_pass1",
+    "YEAR":2016,
+    "SPLITLEVEL":5,
+    "FILELISTS":[
+        "AOD_pp/LHC16e/muon_calo_pass1/000252856.txt"
+    ]
+}
