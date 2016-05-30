@@ -1,0 +1,5 @@
+/global/projecta/projectdirs/aliprod/data/LHC16d/AOD/000252373/002/aod_archive.zip#AliAOD.root
+/global/projecta/projectdirs/aliprod/data/LHC16d/AOD/000252373/003/aod_archive.zip#AliAOD.root
+/global/projecta/projectdirs/aliprod/data/LHC16d/AOD/000252373/004/aod_archive.zip#AliAOD.root
+/global/projecta/projectdirs/aliprod/data/LHC16d/AOD/000252373/005/aod_archive.zip#AliAOD.root
+/global/projecta/projectdirs/aliprod/data/LHC16d/AOD/000252373/001/aod_archive.zip#AliAOD.root
