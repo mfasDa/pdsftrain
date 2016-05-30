@@ -48,7 +48,7 @@ void AliAnalysisTaskEmcalGammaPatches::UserExec(Option_t *opt){
 		if(!TString(fInputEvent->GetFiredTriggerClasses()).Contains(fTriggerString)) return;
 	}
 
-	TClonesArray *triggerpatches = static_cast<THistManager *>(fInputEvent->FindListObject("emcalTriggers"));
+	TClonesArray *triggerpatches = static_cast<THistManager *>(fInputEvent->FindListObject("EmcalTriggers"));
 	for(TIter patchiter = TIter(triggerpatches).Begin(); patchiter != TIter::End(); ++patchiter){
 		AliEMCALTriggerPatchInfo *currentpatch = static_cast<AliEMCALTriggerPatchInfo *>(*patchiter);
 		if(!(currentpatch->GetGammaHighRecalc() || currentpatch->GetGammaLowRecalc())) continue;

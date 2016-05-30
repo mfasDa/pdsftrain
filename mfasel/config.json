@@ -12,8 +12,25 @@
             "STATUS":"Active"
         }
     ] ,
+    "AOD_PbPb":[
+    ],
     "pp":
     [
+    	{
+    		"NAME":"EmcalGammaPatches",
+    		"MACRO":"AddTaskEmcalGammaPatches.C",
+    		"SOURCES":["AliAnalysisTaskEmcalGammaPatches.cxx"],
+    		"STATUS":"Active"
+    	}
+    ],
+    "AOD_pp":
+    [	
+    	{
+    		"NAME":"EmcalGammaPatches",
+    		"MACRO":"AddTaskEmcalGammaPatches.C",
+    		"SOURCES":["AliAnalysisTaskEmcalGammaPatches.cxx"],
+    		"STATUS":"Active"
+    	}
     ],
     "pPb":
     [
@@ -27,6 +44,9 @@
             "MACRO":"$ALICE_PHYSICS/PWGJE/EMCALJetTasks/macros/AddTaskEventFilter.C",
             "STATUS":"Active"
         }
+    ],
+    "AOD_pPb":
+    [
     ],
     "MC_PbPb":
     [
