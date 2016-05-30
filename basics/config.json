@@ -20,6 +20,35 @@
     ] ,
     "pp":
     [
+ 	{
+    		"NAME":"CDBConnect",
+    		"MACRO":"$ALICE_PHYSICS/PWGPP/PilotTrain/AddTaskCDBconnect.C",
+    		"ARGUMENTS":"\"local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2016/OCDB\"",
+    		"STATUS":"Active"
+    	},
+    	{	
+    		"NAME":"PhysicsSelection",
+    		"MACRO":"$ALICE_PHYSICS/OADB/macros/AddTaskPhysicsSelection.C",
+    		"STATUS":"Active"
+    	},
+    	{
+    		"NAME": "TriggerMaker",
+    		"MACRO": "ConfigTriggerMakerPP2016.C",
+    		"STATUS": "Active"
+    	}
+    ],
+    "AOD_pp":[
+ 	{
+    		"NAME":"CDBConnect",
+    		"MACRO":"$ALICE_PHYSICS/PWGPP/PilotTrain/AddTaskCDBconnect.C",
+    		"ARGUMENTS":"\"local:///cvmfs/alice-ocdb.cern.ch/calibration/data/2016/OCDB\"",
+    		"STATUS":"Active"
+    	},
+    	{
+    		"NAME": "TriggerMaker",
+    		"MACRO": "ConfigTriggerMakerPP2016.C",
+    		"STATUS": "Active"
+    	}
     ],
     "pPb":
     [
