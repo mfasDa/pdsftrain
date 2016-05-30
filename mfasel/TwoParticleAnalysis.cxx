@@ -78,7 +78,7 @@ void TwoParticleAnalysis::UserExec(Option_t *opt){
 	for(int itrk = 0; itrk < InputEvent()->GetNumberOfTracks(); itrk++){
 		track = static_cast<AliESDtrack *>(InputEvent()->GetTrack(itrk));
 		int tracklabel = TMath::Abs(track->GetLabel());
-		if(tracklabel != TMath::Abs(leadingpart.Label()) || tracklabel != TMath::Abs(subleadingpart.Label())) continue;
+		if(!(tracklabel == TMath::Abs(leadingpart.Label()) || tracklabel == TMath::Abs(subleadingpart.Label()))) continue;
 		if(!fTrackCuts->AcceptTrack(track)) continue;
 		if(tracklabel == TMath::Abs(leadingpart.Label())) leadingpart.SetReconstructed();
 		else subleadingpart.SetReconstructed();

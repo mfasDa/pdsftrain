@@ -49,6 +49,12 @@
         {
             "NAME":"EfficiencyEtaPhi",
             "MACRO":"$ALICE_PHYSICS/PWGJE/EMCALJetTasks/macros/AddTaskEfficiencyEtaPhi.C",
+            "STATUS":"Inactive"
+        },
+        {
+            "NAME":"TwoParticleAnalysis",
+            "MACRO":"AddTwoParticleAnalysis.C",
+            "SOURCES":["TwoParticleAnalysis.cxx"],
             "STATUS":"Active"
         }
     ]
